@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CloudPulse - A real-time cloud resource monitoring dashboard for tracking instances, CPU, memory, storage, and network across your cloud infrastructure.">
+    <title>CloudPulse — Cloud Resource Monitor Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Ambient Background Effects -->
+    <div class="ambient-bg">
+        <div class="ambient-orb orb-1"></div>
+        <div class="ambient-orb orb-2"></div>
+        <div class="ambient-orb orb-3"></div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" stroke="url(#logoGrad)" stroke-width="2" fill="none"/>
+                        <circle cx="14" cy="14" r="4" fill="url(#logoGrad)"/>
+                        <defs>
+                            <linearGradient id="logoGrad" x1="2" y1="2" x2="26" y2="26">
+                                <stop stop-color="#6366f1"/>
+                                <stop offset="1" stop-color="#06b6d4"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">CloudPulse</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-section="dashboard" id="nav-dashboard">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-section="instances" id="nav-instances">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="6" y2="14"/><line x1="10" y1="10" x2="10" y2="14"/><line x1="14" y1="10" x2="14" y2="14"/></svg>
+                <span>Instances</span>
+            </a>
+            <a href="#" class="nav-item" data-section="monitoring" id="nav-monitoring">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+                <span>Monitoring</span>
+            </a>
+            <a href="#" class="nav-item" data-section="scaling" id="nav-scaling">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span>Auto Scaling</span>
+            </a>
+            <a href="#" class="nav-item" data-section="billing" id="nav-billing">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <span>Billing</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="status-indicator">
+                <div class="status-dot pulse"></div>
+                <span>All Systems Operational</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="top-bar-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+                <div class="breadcrumb">
+                    <span class="breadcrumb-item" id="breadcrumbSection">Dashboard</span>
+                </div>
+            </div>
+            <div class="top-bar-right">
+                <div class="region-selector" id="regionSelector">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    <select id="regionSelect">
+                        <option value="us-east-1">US East (N. Virginia)</option>
+                        <option value="us-west-2">US West (Oregon)</option>
+                        <option value="eu-west-1">EU (Ireland)</option>
+                        <option value="ap-south-1">AP South (Mumbai)</option>
+                    </select>
+                </div>
+                <div class="live-clock" id="liveClock"></div>
+                <div class="notification-bell" id="notificationBell">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    <span class="notification-badge" id="notifBadge">3</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section class="content-section active" id="section-dashboard">
+            <!-- Stats Row -->
+            <div class="stats-row">
+                <div class="stat-card" id="stat-instances">
+                    <div class="stat-icon instances-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="6" y2="14"/><line x1="10" y1="10" x2="10" y2="14"/></svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Running Instances</span>
+                        <span class="stat-value" id="runningInstances">12</span>
+                    </div>
+                    <div class="stat-trend up">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/></svg>
+                        <span>+2 today</span>
+                    </div>
+                </div>
+                <div class="stat-card" id="stat-cpu">
+                    <div class="stat-icon cpu-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Avg CPU Usage</span>
+                        <span class="stat-value" id="avgCpu">67%</span>
+                    </div>
+                    <div class="stat-trend warn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/></svg>
+                        <span>+5% avg</span>
+                    </div>
+                </div>
+                <div class="stat-card" id="stat-memory">
+                    <div class="stat-icon memory-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Memory Used</span>
+                        <span class="stat-value" id="memoryUsed">48 GB</span>
+                    </div>
+                    <div class="stat-trend neutral">
+                        <span>of 96 GB total</span>
+                    </div>
+                </div>
+                <div class="stat-card" id="stat-cost">
+                    <div class="stat-icon cost-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Month-to-Date Cost</span>
+                        <span class="stat-value" id="monthlyCost">$1,247</span>
+                    </div>
+                    <div class="stat-trend down">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23,18 13.5,8.5 8.5,13.5 1,6"/></svg>
+                        <span>-8% vs last</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-row">
+                <div class="chart-card large" id="cpuChartCard">
+                    <div class="chart-header">
+                        <h3>CPU Utilization (Last 24h)</h3>
+                        <div class="chart-actions">
+                            <button class="chart-btn active" data-range="24h">24h</button>
+                            <button class="chart-btn" data-range="7d">7d</button>
+                            <button class="chart-btn" data-range="30d">30d</button>
+                        </div>
+                    </div>
+                    <canvas id="cpuChart" width="800" height="280"></canvas>
+                </div>
+                <div class="chart-card" id="resourceDonutCard">
+                    <div class="chart-header">
+                        <h3>Resource Distribution</h3>
+                    </div>
+                    <canvas id="resourceDonut" width="300" height="280"></canvas>
+                    <div class="donut-legend" id="donutLegend"></div>
+                </div>
+            </div>
+
+            <!-- Activity & Alerts Row -->
+            <div class="bottom-row">
+                <div class="activity-card" id="activityCard">
+                    <div class="chart-header">
+                        <h3>Recent Activity</h3>
+                        <span class="badge">Live</span>
+                    </div>
+                    <div class="activity-list" id="activityList"></div>
+                </div>
+                <div class="alerts-card" id="alertsCard">
+                    <div class="chart-header">
+                        <h3>Active Alerts</h3>
+                        <span class="alert-count" id="alertCount">3</span>
+                    </div>
+                    <div class="alerts-list" id="alertsList"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instances Section -->
+        <section class="content-section" id="section-instances">
+            <div class="section-header">
+                <h2>Cloud Instances</h2>
+                <button class="btn-primary" id="launchInstanceBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Launch Instance
+                </button>
+            </div>
+            <div class="instances-grid" id="instancesGrid"></div>
+        </section>
+
+        <!-- Monitoring Section -->
+        <section class="content-section" id="section-monitoring">
+            <div class="section-header">
+                <h2>Performance Monitoring</h2>
+                <div class="monitor-controls">
+                    <select id="monitorInstance" class="select-styled">
+                        <option value="all">All Instances</option>
+                    </select>
+                    <select id="monitorMetric" class="select-styled">
+                        <option value="cpu">CPU Usage</option>
+                        <option value="memory">Memory Usage</option>
+                        <option value="disk">Disk I/O</option>
+                        <option value="network">Network Traffic</option>
+                    </select>
+                </div>
+            </div>
+            <div class="monitor-grid">
+                <div class="monitor-chart-card">
+                    <h3>CPU Usage Over Time</h3>
+                    <canvas id="monitorCpuChart" width="800" height="300"></canvas>
+                </div>
+                <div class="monitor-chart-card">
+                    <h3>Memory Usage Over Time</h3>
+                    <canvas id="monitorMemChart" width="800" height="300"></canvas>
+                </div>
+                <div class="monitor-chart-card">
+                    <h3>Network In/Out (Mbps)</h3>
+                    <canvas id="monitorNetChart" width="800" height="300"></canvas>
+                </div>
+                <div class="monitor-chart-card">
+                    <h3>Disk Read/Write (MB/s)</h3>
+                    <canvas id="monitorDiskChart" width="800" height="300"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Auto Scaling Section -->
+        <section class="content-section" id="section-scaling">
+            <div class="section-header">
+                <h2>Auto Scaling Configuration</h2>
+            </div>
+            <div class="scaling-dashboard">
+                <div class="scaling-config glass-card">
+                    <h3>Scaling Policy</h3>
+                    <div class="form-group">
+                        <label>Min Instances</label>
+                        <input type="number" id="minInstances" value="2" min="1" max="20" class="input-styled">
+                    </div>
+                    <div class="form-group">
+                        <label>Max Instances</label>
+                        <input type="number" id="maxInstances" value="10" min="1" max="50" class="input-styled">
+                    </div>
+                    <div class="form-group">
+                        <label>CPU Scale-Up Threshold</label>
+                        <div class="range-container">
+                            <input type="range" id="scaleUpThreshold" min="50" max="95" value="75" class="range-styled">
+                            <span class="range-value" id="scaleUpValue">75%</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>CPU Scale-Down Threshold</label>
+                        <div class="range-container">
+                            <input type="range" id="scaleDownThreshold" min="10" max="50" value="25" class="range-styled">
+                            <span class="range-value" id="scaleDownValue">25%</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Cooldown Period</label>
+                        <select id="cooldownPeriod" class="select-styled">
+                            <option value="60">1 minute</option>
+                            <option value="180">3 minutes</option>
+                            <option value="300" selected>5 minutes</option>
+                            <option value="600">10 minutes</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary" id="applyScalingBtn">Apply Policy</button>
+                </div>
+                <div class="scaling-visual glass-card">
+                    <h3>Scaling Activity</h3>
+                    <div class="scaling-timeline" id="scalingTimeline"></div>
+                    <div class="scaling-gauge">
+                        <h4>Current Load vs Capacity</h4>
+                        <canvas id="scalingGauge" width="400" height="200"></canvas>
+                        <div class="gauge-labels">
+                            <span>Current: <strong id="currentLoad">67%</strong></span>
+                            <span>Instances: <strong id="currentInstCount">12</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Billing Section -->
+        <section class="content-section" id="section-billing">
+            <div class="section-header">
+                <h2>Cost & Billing</h2>
+                <div class="billing-period">
+                    <select id="billingPeriod" class="select-styled">
+                        <option value="current">Current Month</option>
+                        <option value="last">Last Month</option>
+                        <option value="quarter">This Quarter</option>
+                    </select>
+                </div>
+            </div>
+            <div class="billing-stats">
+                <div class="billing-stat-card">
+                    <span class="billing-label">Total Spend</span>
+                    <span class="billing-value" id="totalSpend">$1,247.83</span>
+                    <span class="billing-sub">Forecast: $2,890</span>
+                </div>
+                <div class="billing-stat-card">
+                    <span class="billing-label">Compute</span>
+                    <span class="billing-value" id="computeCost">$876.20</span>
+                    <span class="billing-sub">70.2% of total</span>
+                </div>
+                <div class="billing-stat-card">
+                    <span class="billing-label">Storage</span>
+                    <span class="billing-value" id="storageCost">$234.50</span>
+                    <span class="billing-sub">18.8% of total</span>
+                </div>
+                <div class="billing-stat-card">
+                    <span class="billing-label">Network</span>
+                    <span class="billing-value" id="networkCost">$137.13</span>
+                    <span class="billing-sub">11.0% of total</span>
+                </div>
+            </div>
+            <div class="billing-chart-row">
+                <div class="chart-card large">
+                    <div class="chart-header">
+                        <h3>Daily Cost Breakdown</h3>
+                    </div>
+                    <canvas id="billingChart" width="800" height="300"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Cost by Service</h3>
+                    </div>
+                    <canvas id="costPieChart" width="300" height="300"></canvas>
+                    <div class="donut-legend" id="costLegend"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Launch Instance Modal -->
+    <div class="modal-overlay" id="launchModal">
+        <div class="modal glass-card">
+            <div class="modal-header">
+                <h3>Launch New Instance</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Instance Name</label>
+                    <input type="text" id="instanceName" placeholder="e.g. web-server-04" class="input-styled">
+                </div>
+                <div class="form-group">
+                    <label>Instance Type</label>
+                    <select id="instanceType" class="select-styled">
+                        <option value="t2.micro">t2.micro (1 vCPU, 1 GB RAM) — $0.012/hr</option>
+                        <option value="t2.small">t2.small (1 vCPU, 2 GB RAM) — $0.023/hr</option>
+                        <option value="t2.medium" selected>t2.medium (2 vCPU, 4 GB RAM) — $0.046/hr</option>
+                        <option value="t2.large">t2.large (2 vCPU, 8 GB RAM) — $0.093/hr</option>
+                        <option value="m5.large">m5.large (2 vCPU, 8 GB RAM) — $0.096/hr</option>
+                        <option value="c5.xlarge">c5.xlarge (4 vCPU, 8 GB RAM) — $0.170/hr</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Operating System</label>
+                    <select id="instanceOS" class="select-styled">
+                        <option value="ubuntu">Ubuntu 22.04 LTS</option>
+                        <option value="amazon-linux">Amazon Linux 2023</option>
+                        <option value="windows">Windows Server 2022</option>
+                        <option value="debian">Debian 12</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Storage (GB)</label>
+                    <input type="number" id="instanceStorage" value="30" min="8" max="1000" class="input-styled">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelModal">Cancel</button>
+                <button class="btn-primary" id="confirmLaunch">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+                    Launch
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
