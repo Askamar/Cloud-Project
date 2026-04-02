@@ -1,115 +1,183 @@
-# ☁️ CloudPulse — Cloud Resource Monitor Dashboard
+# ☁️ CloudPulse — AWS Cloud Resource Monitor Dashboard
 
-A **simulated cloud infrastructure monitoring dashboard** built with pure HTML, CSS, and JavaScript. This mini-project demonstrates core cloud computing concepts like resource monitoring, auto-scaling, instance management, and cost tracking — all running locally in the browser with **zero AWS costs**.
+A **real-time cloud infrastructure monitoring dashboard** that connects live to your AWS account to display EC2 instance health, performance metrics, auto-scaling events, and cost tracking — powered by the AWS SDK and served via a Node.js backend.
+
+---
+
+## ☁️ Cloud Technologies Used
+
+| AWS Service | Purpose |
+|---|---|
+| **Amazon EC2** | Lists and manages all virtual machine instances (status, type, IP, OS, storage) |
+| **Amazon CloudWatch** | Fetches real-time metrics: CPU utilization, Network In/Out, Disk Read/Write |
+| **CloudWatch Agent (CWAgent)** | Retrieves memory usage metrics (`mem_used_percent`) from inside EC2 instances |
+| **AWS IAM** | Authentication via `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` credentials |
+| **AWS Regions** | Region-aware client setup — configurable via `AWS_REGION` environment variable |
+
+### AWS SDK Packages Used
+
+```json
+"@aws-sdk/client-ec2"          → DescribeInstancesCommand (list all EC2 instances)
+"@aws-sdk/client-cloudwatch"   → GetMetricStatisticsCommand (pull CloudWatch metrics)
+```
+
+### CloudWatch Metrics Collected
+
+| Metric | Namespace | Description |
+|---|---|---|
+| `CPUUtilization` | `AWS/EC2` | CPU usage percentage per instance |
+| `NetworkIn` | `AWS/EC2` | Inbound network traffic (bytes) |
+| `NetworkOut` | `AWS/EC2` | Outbound network traffic (bytes) |
+| `DiskReadBytes` | `AWS/EC2` | Disk read throughput (bytes) |
+| `DiskWriteBytes` | `AWS/EC2` | Disk write throughput (bytes) |
+| `mem_used_percent` | `CWAgent` | Memory usage % (requires CloudWatch Agent on EC2) |
 
 ---
 
 ## 🚀 Features
 
 ### 📊 Dashboard Overview
-- Real-time stats: running instances, average CPU, memory usage, estimated monthly cost
-- CPU utilization line chart (24h / 7d / 30d views)
-- Resource distribution donut chart
-- Live activity feed and active alerts panel
+- Live sync of all EC2 instances from your AWS account
+- Real-time stats: running instances, average CPU, estimated monthly cost
+- CPU utilization line chart (live history)
+- Resource distribution donut chart (Running / Stopped / Pending)
+- Live activity feed and active CloudWatch alerts panel
 
 ### 🖥️ Instance Management
-- View all cloud instances with status (Running / Stopped / Pending)
-- Launch new instances with configurable type, OS, and storage
-- Stop, Start, Reboot, and Terminate instances
-- Live CPU/memory metric bars per instance
+- View all EC2 instances with status, instance type, OS, IP, and storage
+- Start, Stop, Reboot, and Terminate instances
+- Live CPU/memory metric bars per instance (refreshed every 15 seconds)
 
 ### 📈 Performance Monitoring
-- CPU, Memory, Network, and Disk I/O charts
+- CPU, Memory, Network In/Out, and Disk Read/Write charts
 - Smooth bezier-curve line charts with gradient fills
-- Filter by specific instance or view aggregated metrics
+- Filter by specific instance or view aggregated fleet metrics
 
 ### ⚡ Auto Scaling
 - Configure min/max instances and scaling thresholds
 - Visual scaling timeline showing scale-up/down events
 - Real-time gauge showing current load vs capacity
-- Adjustable cooldown period
 
 ### 💰 Cost & Billing
-- Month-to-date spending breakdown
+- Monthly spending estimate per instance type
 - Daily cost stacked bar chart (Compute / Storage / Network)
-- Cost distribution pie chart
-- Spending forecast
+- Cost distribution chart and spending forecast
 
 ---
 
-## 🎨 Design Highlights
+## 🛠️ Full Tech Stack
 
-- **Dark glassmorphism** theme with ambient floating orbs
-- **Custom canvas charts** — no external libraries needed
-- **Smooth animations** and micro-interactions
-- **Fully responsive** — works on desktop, tablet, and mobile
-- **JetBrains Mono + Inter** typography
-- **Toast notifications** for all user actions
-
----
-
-## 🛠️ Tech Stack
-
-| Layer     | Technology          |
-|-----------|---------------------|
-| Structure | HTML5               |
-| Styling   | Vanilla CSS3        |
-| Logic     | Vanilla JavaScript  |
-| Charts    | HTML5 Canvas API    |
-| Fonts     | Google Fonts (Inter, JetBrains Mono) |
-
-> **No frameworks, no libraries, no build tools required.**
+| Layer | Technology |
+|---|---|
+| **Cloud Platform** | Amazon Web Services (AWS) |
+| **Compute Metrics** | Amazon EC2 + CloudWatch |
+| **Backend** | Node.js + Express |
+| **AWS SDK** | `@aws-sdk/client-ec2`, `@aws-sdk/client-cloudwatch` |
+| **Auth** | AWS IAM (Access Key + Secret) via `dotenv` |
+| **Frontend** | Vanilla HTML5, CSS3, JavaScript |
+| **Charts** | HTML5 Canvas API (custom, no libraries) |
+| **Fonts** | Google Fonts — Inter, JetBrains Mono |
+| **Dev Server** | Nodemon |
 
 ---
 
 ## 📁 Project Structure
 
 ```
-AWS/
-├── index.html    # Main HTML structure
-├── styles.css    # Complete design system & responsive styles
-├── app.js        # Application logic, charts, simulated data
-└── README.md     # Project documentation
+Cloud-Project/
+├── index.html        # Frontend UI — dashboard, instances, monitoring, billing
+├── styles.css        # Complete design system & responsive styles (glassmorphism)
+├── app.js            # Frontend logic, charts, live data rendering
+├── server.js         # Node.js backend — AWS SDK calls (EC2 + CloudWatch)
+├── package.json      # Dependencies
+├── .env              # ⚠️ AWS credentials (NEVER commit — gitignored)
+├── .env.example      # Template for environment variables
+├── .gitignore        # Excludes .env and node_modules
+└── README.md         # Project documentation
 ```
 
 ---
 
-## ▶️ How to Run
+## ⚙️ Setup & Configuration
 
-Simply open `index.html` in any modern web browser:
+### 1. Clone the repository
 
 ```bash
-# Option 1: Double-click index.html in File Explorer
-
-# Option 2: From terminal
-start index.html
-
-# Option 3: Use VS Code Live Server extension
+git clone https://github.com/Askamar/Cloud-Project.git
+cd Cloud-Project
 ```
 
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure AWS credentials
+
+Copy the example file and add your credentials:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env`:
+
+```env
+AWS_ACCESS_KEY_ID=your_access_key_here
+AWS_SECRET_ACCESS_KEY=your_secret_key_here
+AWS_REGION=ap-south-1
+```
+
+> ⚠️ **Never commit `.env` to version control.** It is already listed in `.gitignore`.
+
+### 4. AWS IAM Permissions Required
+
+Your IAM user must have the following permissions:
+
+```json
+{
+  "Effect": "Allow",
+  "Action": [
+    "ec2:DescribeInstances",
+    "cloudwatch:GetMetricStatistics"
+  ],
+  "Resource": "*"
+}
+```
+
+### 5. Run the application
+
+```bash
+# Development (auto-restart on changes)
+npm run dev
+
+# Production
+npm start
+```
+
+Open your browser at: **http://localhost:3000**
+
 ---
 
-## ☁️ Cloud Computing Concepts Demonstrated
+## 🔄 How Live Data Works
 
-| Concept              | Where in the App                           |
-|----------------------|--------------------------------------------|
-| Virtual Instances    | Instances tab — launch, manage VMs         |
-| Resource Monitoring  | Monitoring tab — CPU, RAM, Network, Disk   |
-| Auto Scaling         | Scaling tab — policies, thresholds, events |
-| Cost Management      | Billing tab — cost tracking, forecasts     |
-| Regions              | Region selector in top bar                 |
-| Load Balancing       | Load balancer instance in the dashboard    |
-| Alerting             | Active alerts panel on dashboard           |
+1. The frontend (`app.js`) polls `/api/dashboard` every **15 seconds**
+2. The backend (`server.js`) calls **AWS EC2** to list all instances
+3. For each **running** instance, it fetches **6 CloudWatch metrics** in parallel
+4. Metrics are cached for **15 seconds** to avoid AWS API rate limits
+5. If the backend is unreachable, the dashboard shows last-known values with a warning toast
 
 ---
 
-## 💡 AWS Free Tier Compatible
+## ☁️ AWS Free Tier Deployment Options
 
-This project runs **100% locally** in your browser. No AWS services are consumed. If you wish to deploy it:
-
-- **Amazon S3 Static Hosting** — Free tier: 5 GB storage, 20,000 GET requests/month
-- **AWS CloudFront** — Free tier: 1 TB data transfer/month
-- **AWS Amplify** — Free tier: 5 GB hosting, 15 GB/month transfer
+| Service | Free Tier Limit |
+|---|---|
+| **Amazon S3 Static Hosting** | 5 GB storage, 20,000 GET requests/month |
+| **AWS CloudFront CDN** | 1 TB data transfer/month |
+| **AWS Amplify** | 5 GB hosting, 15 GB/month transfer |
+| **AWS EC2 t2.micro** | 750 hours/month (12 months) |
 
 ---
 
